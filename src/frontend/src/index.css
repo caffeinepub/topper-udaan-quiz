@@ -1,0 +1,203 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light mode colors - OKLCH format */
+    --background: oklch(98% 0.01 264);
+    --foreground: oklch(20% 0.02 264);
+    --card: oklch(100% 0 0);
+    --card-foreground: oklch(20% 0.02 264);
+    --popover: oklch(100% 0 0);
+    --popover-foreground: oklch(20% 0.02 264);
+    --primary: oklch(55% 0.22 264);
+    --primary-foreground: oklch(98% 0.01 264);
+    --secondary: oklch(85% 0.05 264);
+    --secondary-foreground: oklch(20% 0.02 264);
+    --muted: oklch(92% 0.02 264);
+    --muted-foreground: oklch(50% 0.02 264);
+    --accent: oklch(75% 0.18 330);
+    --accent-foreground: oklch(98% 0.01 264);
+    --destructive: oklch(55% 0.22 25);
+    --destructive-foreground: oklch(98% 0.01 264);
+    --border: oklch(85% 0.02 264);
+    --input: oklch(85% 0.02 264);
+    --ring: oklch(55% 0.22 264);
+    --success: oklch(65% 0.18 145);
+    --warning: oklch(75% 0.15 85);
+    --radius: 1rem;
+  }
+
+  .dark {
+    /* Dark mode colors - OKLCH format */
+    --background: oklch(15% 0.02 264);
+    --foreground: oklch(95% 0.01 264);
+    --card: oklch(18% 0.02 264);
+    --card-foreground: oklch(95% 0.01 264);
+    --popover: oklch(18% 0.02 264);
+    --popover-foreground: oklch(95% 0.01 264);
+    --primary: oklch(65% 0.22 264);
+    --primary-foreground: oklch(15% 0.02 264);
+    --secondary: oklch(25% 0.05 264);
+    --secondary-foreground: oklch(95% 0.01 264);
+    --muted: oklch(25% 0.02 264);
+    --muted-foreground: oklch(65% 0.02 264);
+    --accent: oklch(75% 0.18 330);
+    --accent-foreground: oklch(15% 0.02 264);
+    --destructive: oklch(55% 0.22 25);
+    --destructive-foreground: oklch(95% 0.01 264);
+    --border: oklch(30% 0.02 264);
+    --input: oklch(30% 0.02 264);
+    --ring: oklch(65% 0.22 264);
+    --success: oklch(65% 0.18 145);
+    --warning: oklch(75% 0.15 85);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Smooth screen transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.4s ease-out;
+}
+
+.animate-slideDown {
+  animation: slideDown 0.4s ease-out;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.3s ease-out;
+}
+
+/* Smooth transitions for interactive elements */
+.transition-smooth {
+  transition: all 0.2s ease-out;
+}
+
+.transition-smooth-slow {
+  transition: all 0.3s ease-out;
+}
+
+/* Floating clouds animation */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Puzzle instruction text styling - Bright turquoise matching screenshot */
+.text-puzzle-instruction {
+  color: oklch(70% 0.18 195);
+  text-shadow: 
+    0 2px 8px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(0, 255, 255, 0.5),
+    0 0 15px rgba(0, 255, 255, 0.3);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* Puzzle stage styling */
+.puzzle-stage {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 2rem;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+/* Button hover effects */
+button {
+  transition: transform 0.15s ease-out, box-shadow 0.15s ease-out;
+}
+
+button:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+/* Card entrance animations */
+.card-enter {
+  animation: scaleIn 0.3s ease-out;
+}
+
+/* Smooth panel backgrounds */
+.panel-smooth {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.85) 100%);
+  backdrop-filter: blur(10px);
+  border-radius: 1.5rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

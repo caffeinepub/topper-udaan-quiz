@@ -1,0 +1,106 @@
+{
+  "kind": "implementation_plan",
+  "version": "1.0",
+  "title": "Level 30 diamond reward overlay + dashboard reward card",
+  "requirements": [
+    {
+      "id": "REQ-35",
+      "summary": "Generate a one-time (per run) diamond reward payload (UID + diamonds) only when the player completes the final level and first reaches the game-complete screen; clear it on restart.",
+      "acceptanceCriteria": [
+        "Completing any level other than the last level does not generate/show diamonds or UID.",
+        "Completing the last level transitions to the existing game-complete screen and generates exactly one reward payload (uid + diamonds) per game run (until Restart Game).",
+        "Generated UID matches regex ^UID-\\d{6}$.",
+        "Diamonds awarded are >= 1000 (default 1000).",
+        "Reward payload is cleared when the user restarts the game (existing Play Again / restart flow)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Add session-scoped reward state (uid + diamonds + optional rank) and generate it exactly once when entering the 'game-complete' screen for the final level (last item in puzzleLevels). Ensure the UID format is \"UID-\" + 6 digits, diamonds default to 1000, and the payload is cleared in the existing restart flow. Keep all new user-facing text in English."
+        },
+        {
+          "path": "frontend/src/lib/rewards.ts",
+          "operation": "create",
+          "description": "Create small frontend utilities to (1) generate a UID matching ^UID-\\d{6}$ and (2) format diamonds using English thousands separators (e.g., Intl.NumberFormat('en-US'))."
+        }
+      ]
+    },
+    {
+      "id": "REQ-36",
+      "summary": "Create and display a colorful DiamondNotification overlay on game completion that auto-shows and then auto-hides after ~5 seconds without reappearing repeatedly.",
+      "acceptanceCriteria": [
+        "On entering the game-complete screen, the DiamondNotification is visible without additional user action.",
+        "The notification auto-hides after ~5 seconds and does not reappear repeatedly while staying on game-complete.",
+        "The notification content includes English text labels for Diamonds, UID, and Rank (Rank only when provided).",
+        "The notification is rendered above other UI (overlay) and is not clipped by page containers.",
+        "No inline alert dialogs are introduced for the reward UI."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/DiamondNotification.tsx",
+          "operation": "create",
+          "description": "Implement <DiamondNotification /> as a fixed-position overlay (high z-index) styled to match the existing colorful cartoon UI. Render playerName, formatted diamonds, UID, and an optional Rank line only when rank is provided. Use shadcn-ui Card/Button primitives where appropriate; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Wire <DiamondNotification /> into the existing game-complete screen: auto-show it on first entry into game-complete when a reward payload exists, auto-hide after ~5 seconds (with proper timeout cleanup), and prevent repeated re-show while remaining on the game-complete screen."
+        },
+        {
+          "path": "frontend/src/index.css",
+          "operation": "modify",
+          "description": "Add/adjust any minimal global styles needed to ensure the notification overlay reliably appears above all UI (e.g., optional overlay animation class or z-index helper), while staying consistent with existing Tailwind/global animation patterns."
+        }
+      ]
+    },
+    {
+      "id": "REQ-37",
+      "summary": "Show a DashboardDiamond reward card on the Dashboard only when the full game is completed and a reward payload exists.",
+      "acceptanceCriteria": [
+        "Before game completion, the Dashboard does not show the reward card.",
+        "After game completion (Level 30), returning to the Dashboard shows the reward card with diamonds + UID.",
+        "Reward card styling matches the existing dashboard theme (rounded, colorful, readable).",
+        "Rank line is displayed only if a rank value exists; otherwise it is omitted."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/components/DashboardDiamond.tsx",
+          "operation": "create",
+          "description": "Implement <DashboardDiamond /> reward card styled for the existing dashboard theme. Display playerName, formatted diamonds, UID, and optional Rank when available. Use shadcn-ui Card/Badge primitives where appropriate; verify the component's usage instructions before implementing."
+        },
+        {
+          "path": "frontend/src/components/Dashboard.tsx",
+          "operation": "modify",
+          "description": "Add optional props for the reward payload and conditionally render <DashboardDiamond /> near the top of the Dashboard UI only when a reward payload exists and the game has been completed. Keep all new user-facing text in English."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Pass the reward payload (if present) into <Dashboard /> so the reward card can appear after game completion when navigating back to the dashboard."
+        }
+      ]
+    },
+    {
+      "id": "REQ-38",
+      "summary": "Populate optional reward rank deterministically from available leaderboard data (top 5) without randomization; omit rank if not derivable.",
+      "acceptanceCriteria": [
+        "No code assigns rank via Math.random or similar randomness.",
+        "If the player's submitted score appears in the fetched leaderboard list, rank is set to that list position (1-based) and shown; otherwise rank is omitted.",
+        "Leaderboard submission remains the existing behavior (submit score at game completion, invalidate and refetch leaderboard)."
+      ],
+      "file_operations": [
+        {
+          "path": "frontend/src/lib/rewards.ts",
+          "operation": "modify",
+          "description": "Add a helper to compute an optional 1-based rank from the currently fetched leaderboard list by matching the player's submitted entry (e.g., same name and same score). If not found in the available list, return undefined. Do not use any randomness."
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "operation": "modify",
+          "description": "Integrate deterministic rank calculation into the reward payload lifecycle: after leaderboard data is available/refetched for the run's submitted score, set reward.rank only if the player's entry exists in the fetched top list; otherwise leave it undefined. Preserve existing score submission behavior using the current react-query invalidation/refetch flow."
+        }
+      ]
+    }
+  ]
+}

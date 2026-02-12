@@ -1,0 +1,107 @@
+{
+  "kind": "build_request",
+  "title": "Add final level (Level 30) diamond reward notification + dashboard reward card",
+  "priority": "high",
+  "requirements": [
+    {
+      "id": "REQ-35",
+      "text": "Add a final-game-completion diamond reward system in the React app that triggers only when the player completes the last level (Level 30 / last item in puzzleLevels). On first entry into the game-complete state, generate and store (in frontend state for the current session) a UID in the format \"UID-\" + 6 digits and award a minimum of 1000 diamonds. Do not trigger this reward on non-final levels.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-add-code-1",
+          "msg-user-clarifications-1",
+          "msg-user-do-it-now"
+        ],
+        "quotes": [
+          "This appears after the player completes the final level (level 30). Not after every level, only at game completion",
+          "Generate the player UID and assign minimum 1000 diamonds.",
+          "Do it now"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Completing any level other than the last level does not generate/show diamonds or UID.",
+        "Completing the last level transitions to the existing game-complete screen and generates exactly one reward payload (uid + diamonds) per game run (until Restart Game).",
+        "Generated UID matches regex ^UID-\\d{6}$.",
+        "Diamonds awarded are >= 1000 (default 1000).",
+        "Reward payload is cleared when the user restarts the game (existing Play Again / restart flow)."
+      ]
+    },
+    {
+      "id": "REQ-36",
+      "text": "Implement a DiamondNotification overlay component and display it as a floating popup on game completion. The popup must auto-show when the game-complete screen is reached and auto-hide after ~5 seconds. The popup must display: playerName, diamonds (formatted with thousands separators), UID, and an optional rank line only if rank is available. Adapt styling to match the existing colorful cartoon UI (do not use the dark toast styling from the snippet).",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-add-code-1",
+          "msg-user-clarifications-1"
+        ],
+        "quotes": [
+          "Render <DiamondNotification /> as a floating overlay. Auto-hide after a few seconds.",
+          "For your cartoon / colorful UI, you should: Use bright colors (greens, blues, yellows) to match your game theme.",
+          "const DiamondNotification = ({ playerName, diamonds, uid, rank }) => { ... Hide after 5 seconds ... }"
+        ]
+      },
+      "acceptanceCriteria": [
+        "On entering the game-complete screen, the DiamondNotification is visible without additional user action.",
+        "The notification auto-hides after ~5 seconds and does not reappear repeatedly while staying on game-complete.",
+        "The notification content includes English text labels for Diamonds, UID, and Rank (Rank only when provided).",
+        "The notification is rendered above other UI (overlay) and is not clipped by page containers.",
+        "No inline alert dialogs are introduced for the reward UI."
+      ]
+    },
+    {
+      "id": "REQ-37",
+      "text": "Implement a DashboardDiamond reward card component and render it on the Dashboard screen when the player has completed the full game and a reward payload exists in state. The card must show playerName, diamonds, UID, and optional rank when available. Keep all user-facing text in English.",
+      "target": "frontend",
+      "source": {
+        "messageIds": [
+          "msg-user-add-code-1"
+        ],
+        "quotes": [
+          "const DashboardDiamond = ({ playerName, diamonds, uid, rank }) => { ... }"
+        ]
+      },
+      "acceptanceCriteria": [
+        "Before game completion, the Dashboard does not show the reward card.",
+        "After game completion (Level 30), returning to the Dashboard shows the reward card with diamonds + UID.",
+        "Reward card styling matches the existing dashboard theme (rounded, colorful, readable).",
+        "Rank line is displayed only if a rank value exists; otherwise it is omitted."
+      ]
+    },
+    {
+      "id": "REQ-38",
+      "text": "Determine and populate the optional reward rank value without using randomization. If rank cannot be determined from available leaderboard data (currently top 5), omit rank (leave it undefined) rather than guessing. Do not change the meaning of leaderboard score submission.",
+      "target": "both",
+      "source": {
+        "messageIds": [
+          "msg-user-clarifications-1",
+          "msg-user-add-code-1"
+        ],
+        "quotes": [
+          "Optional: calculate rank based on leaderboard logic",
+          "const playerRank = Math.floor(Math.random() * 10) + 1; // example rank"
+        ]
+      },
+      "acceptanceCriteria": [
+        "No code assigns rank via Math.random or similar randomness.",
+        "If the player's submitted score appears in the fetched leaderboard list, rank is set to that list position (1-based) and shown; otherwise rank is omitted.",
+        "Leaderboard submission remains the existing behavior (submit score at game completion, invalidate and refetch leaderboard)."
+      ]
+    }
+  ],
+  "constraints": [
+    "Frontend immutable paths must not be edited: frontend/src/hooks/useInternetIdentity.ts, frontend/src/hooks/useInternetIdentity.tsx, frontend/src/hooks/useActor.ts, frontend/src/main.tsx, frontend/src/components/ui/*.",
+    "Backend must remain a single Motoko actor in backend/main.mo; only introduce migration if persistent state schema changes (avoid unless required).",
+    "All user-facing text introduced by this change must be in English."
+  ],
+  "nonGoals": [
+    "Do not implement an on-chain diamonds/UID claim system or any anti-cheat/first-100 limitation logic in Motoko for this change.",
+    "Do not modify the existing leaderboard data model ({name, score}) or replace the current score submission flow.",
+    "Do not show the diamond reward popup after every level; only show it at full game completion."
+  ],
+  "imageRequirements": {
+    "required": [],
+    "edits": []
+  }
+}

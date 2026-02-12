@@ -1,0 +1,453 @@
+{
+  "schemaVersion": "1.0.0",
+  "projectStateVersion": 17,
+  "summary": "Transform the Topper Udaan app into a Brain Test–style puzzle/brain-teaser game with a colorful cartoon/gaming UI. Add a Hint button that shows tips for stuck players, and a fail-safe system that after 2 failed attempts on the same level presents 3 multiple-choice options including the correct answer. Adjust creator-name placement by removing it from its current location and placing it under the “Choose your challenge” section. Continue expanding with new, more futuristic/AI-flavored and more realistic challenges and additional levels, while remaining an Internet Computer dapp (React frontend + Motoko backend) with an on-chain global leaderboard. Update the puzzle instruction/question text color (currently white) to a different color.",
+  "architectural_notes": [
+    "Target platform: Internet Computer (ICP) with React frontend and Motoko backend canister.",
+    "Leaderboard persistence: on-chain shared global leaderboard (not browser localStorage).",
+    "Panel background images should be shipped as static assets in the React frontend (not served via Motoko) and applied via CSS/background-image for the instruction/prompt panel.",
+    "Final-level completion (Level 30) should trigger a one-time reward UI overlay (DiamondNotification) plus an optional dashboard reward card (DashboardDiamond), including generated UID and diamonds; rank display is optional."
+  ],
+  "known_issues": [
+    "Sound effects are not playing (app is silent) in the current React + Motoko IC app."
+  ],
+  "isFixRequest": false,
+  "existing_features": [
+    {
+      "id": "feature-recreate-the-provided-topper-udaan-quiz-as-a-react-typescript-single-page-ui-that-matches-the-current-layout-and-styling-dark-gradient-page-background-centered-card-container-with-rounded-corners-and-shadow-heading-and-creator-subtitle-name-input-start-button-quiz-section-with-question-text-clickable-answer-options-with-hover-scale-effect-next-restart-buttons-score-display-and-a-visible-leaderboard-section",
+      "title": "Recreate the provided Topper Udaan Quiz as a React + TypeScript single-page UI that matches the current layout and styling: dark gradient page background, centered card container with rounded corners and shadow, heading and creator subtitle, name input + Start button, quiz section with question text, clickable answer options with hover scale effect, Next/Restart buttons, score display, and a visible leaderboard section.",
+      "reqIds": [
+        "REQ-1"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-the-quiz-flow-in-react-to-match-the-original-behavior-and-question-set-three-questions-with-the-same-wording-the-same-answer-options-and-the-same-correct-answers-track-current-question-index-and-score-show-final-score-on-completion-and-allow-restart-without-re-entering-the-name",
+      "title": "Implement the quiz flow in React to match the original behavior and question set: three questions with the same wording, the same answer options, and the same correct answers; track current question index and score; show final score on completion and allow restart without re-entering the name.",
+      "reqIds": [
+        "REQ-2"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-celebration-effects-on-perfect-score-trigger-a-confetti-fireworks-animation-when-the-user-achieves-a-full-score-score-equals-number-of-questions-matching-the-original-canvas-confetti-behavior-approximately-200-particles-spread-100-origin-y-0-6",
+      "title": "Add celebration effects on perfect score: trigger a confetti/fireworks animation when the user achieves a full score (score equals number of questions), matching the original 'canvas-confetti' behavior (approximately 200 particles, spread ~100, origin y ~0.6).",
+      "reqIds": [
+        "REQ-3"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-sound-effects-consistent-with-the-requested-feature-set-play-a-short-sound-on-answer-selection-distinct-for-correct-vs-incorrect-and-an-optional-completion-sound-on-quiz-finish-include-a-simple-mute-unmute-toggle-in-the-ui-that-persists-for-the-session",
+      "title": "Add sound effects consistent with the requested feature set: play a short sound on answer selection (distinct for correct vs incorrect) and an optional completion sound on quiz finish; include a simple mute/unmute toggle in the UI that persists for the session.",
+      "reqIds": [
+        "REQ-4"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-wire-the-react-frontend-to-the-motoko-backend-using-react-query-submit-the-player-score-to-the-canister-when-the-quiz-finishes-and-load-render-the-global-leaderboard-in-the-leaderboard-section-ensure-the-leaderboard-updates-after-a-new-score-submission-without-requiring-a-page-reload",
+      "title": "Wire the React frontend to the Motoko backend using React Query: submit the player score to the canister when the quiz finishes, and load/render the global leaderboard in the leaderboard section; ensure the leaderboard updates after a new score submission without requiring a page reload.",
+      "reqIds": [
+        "REQ-6"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-the-ui-is-clean-modern-and-mobile-friendly-while-preserving-the-existing-overall-look-implement-responsive-spacing-typography-accessible-touch-targets-and-smooth-transitions-animations-comparable-to-the-original-including-fade-in-for-the-container",
+      "title": "Ensure the UI is clean, modern, and mobile-friendly while preserving the existing overall look: implement responsive spacing/typography, accessible touch targets, and smooth transitions/animations comparable to the original (including fade-in for the container).",
+      "reqIds": [
+        "REQ-7"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-apply-a-coherent-visual-theme-consistently-across-the-app-that-aligns-with-the-original-dark-style-dark-charcoal-near-black-gradient-background-muted-gray-surfaces-and-warm-accent-colors-e-g-orange-for-start-green-for-correct-red-for-wrong-blue-for-restart-with-consistent-typography-and-spacing",
+      "title": "Apply a coherent visual theme consistently across the app that aligns with the original dark style: dark charcoal/near-black gradient background, muted gray surfaces, and warm accent colors (e.g., orange for Start, green for correct, red for wrong, blue for restart) with consistent typography and spacing.",
+      "reqIds": [
+        "REQ-8"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-completely-replace-the-current-topper-udaan-quiz-gameplay-with-a-brain-test-style-level-based-puzzle-game-removing-the-existing-question-answer-quiz-flow-start-quiz-multiple-choice-answers-next-question-from-the-primary-user-journey",
+      "title": "Completely replace the current Topper Udaan quiz gameplay with a Brain Test–style level-based puzzle game, removing the existing question/answer quiz flow (start quiz, multiple-choice answers, next question) from the primary user journey.",
+      "reqIds": [
+        "REQ-9"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-brain-test-style-puzzle-interactions-within-react-tappable-clickable-elements-draggable-elements-and-at-least-one-multi-step-puzzle-that-requires-performing-actions-in-sequence-using-pointer-touch-interactions-suitable-for-mobile-and-desktop",
+      "title": "Implement Brain Test–style puzzle interactions within React (tappable/clickable elements, draggable elements, and at least one multi-step puzzle that requires performing actions in sequence) using pointer/touch interactions suitable for mobile and desktop.",
+      "reqIds": [
+        "REQ-10"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-entire-app-ui-theme-layout-with-a-colorful-cartoon-style-design-inspired-by-casual-mobile-puzzle-games-rounded-bubbly-panels-playful-typography-bright-palette-large-touch-targets-and-remove-the-current-dark-gradient-card-styling-from-the-primary-screens",
+      "title": "Replace the entire app UI/theme/layout with a colorful, cartoon-style design inspired by casual mobile puzzle games (rounded bubbly panels, playful typography, bright palette, large touch targets), and remove the current dark gradient/card styling from the primary screens.",
+      "reqIds": [
+        "REQ-11"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-keep-using-the-existing-motoko-leaderboard-canister-and-react-query-wiring-but-reinterpret-the-submitted-score-to-match-the-new-puzzle-game-e-g-levels-solved-or-total-points-earned-and-update-the-leaderboard-ui-copy-accordingly-to-reflect-the-new-scoring-meaning",
+      "title": "Keep using the existing Motoko leaderboard canister and React Query wiring, but reinterpret the submitted score to match the new puzzle game (e.g., levels solved or total points earned) and update the leaderboard UI copy accordingly to reflect the new scoring meaning.",
+      "reqIds": [
+        "REQ-12"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-sound-and-celebration-feedback-to-align-with-the-new-puzzle-game-events-e-g-success-fail-level-complete-while-preserving-the-existing-mute-unmute-toggle-behavior-and-session-persistence",
+      "title": "Update sound and celebration feedback to align with the new puzzle game events (e.g., success/fail/level-complete), while preserving the existing mute/unmute toggle behavior and session persistence.",
+      "reqIds": [
+        "REQ-13"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-generated-cartoon-style-static-art-assets-background-and-simple-ui-mascot-graphics-and-render-them-from-the-frontend-as-static-files-do-not-serve-them-through-the-backend",
+      "title": "Add generated cartoon-style static art assets (background and simple UI/mascot graphics) and render them from the frontend as static files (do not serve them through the backend).",
+      "reqIds": [
+        "REQ-14"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-dashboard-main-menu-screen-that-lets-the-player-select-levels-and-access-multiple-options-including-filtering-levels-by-difficulty-easy-medium-hard",
+      "title": "Add a dashboard (main menu) screen that lets the player select levels and access multiple options, including filtering levels by difficulty: Easy, Medium, Hard.",
+      "reqIds": [
+        "REQ-15"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-introduce-a-difficulty-system-for-levels-easy-medium-hard-and-ensure-the-level-selection-dashboard-displays-each-level-s-difficulty-and-respects-the-selected-filter",
+      "title": "Introduce a difficulty system for levels (Easy/Medium/Hard) and ensure the level-selection dashboard displays each level’s difficulty and respects the selected filter.",
+      "reqIds": [
+        "REQ-16"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expand-the-game-with-additional-brain-test-style-puzzle-levels-and-make-the-level-content-more-interesting-vary-puzzle-types-by-difficulty-e-g-easy-medium-hard-have-different-puzzle-interaction-types-such-as-drag-trick-riddle",
+      "title": "Expand the game with additional Brain Test–style puzzle levels and make the level content more interesting; vary puzzle types by difficulty (e.g., Easy/Medium/Hard have different puzzle interaction types such as drag, trick, riddle).",
+      "reqIds": [
+        "REQ-17"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-persistent-on-screen-creator-credit-that-appears-on-every-screen-in-a-corner-reading-exactly-created-by-soumyajit-dutta-using-a-clean-readable-normal-font",
+      "title": "Add a persistent on-screen creator credit that appears on every screen in a corner, reading exactly: \"Created by SOUMYAJIT DUTTA\", using a clean, readable normal font.",
+      "reqIds": [
+        "REQ-18"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-update-in-app-typography-to-improve-readability-by-using-normal-standard-font-styling-for-primary-instructional-and-informational-text-across-screens-while-keeping-the-colorful-cartoon-ui-feel",
+      "title": "Update in-app typography to improve readability by using normal/standard font styling for primary instructional and informational text across screens (while keeping the colorful cartoon UI feel).",
+      "reqIds": [
+        "REQ-19"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-current-stone-gray-looking-rounded-panel-styling-shown-in-the-uploaded-screenshots-with-a-more-colorful-cartoon-gaming-style-background-treatment-for-the-same-panel-areas-e-g-the-feature-list-panel-on-the-start-screen-and-the-instruction-panel-used-during-gameplay-while-keeping-the-existing-layout-and-text-content-readable",
+      "title": "Replace the current stone/gray-looking rounded panel styling shown in the uploaded screenshots with a more colorful, cartoon/gaming-style background treatment for the same panel areas (e.g., the feature list panel on the start screen and the instruction panel used during gameplay), while keeping the existing layout and text content readable.",
+      "reqIds": [
+        "REQ-20"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-per-level-hint-button-that-shows-tips-only-when-the-player-presses-it-do-not-auto-show-tips-the-tip-content-must-come-from-the-current-level-s-hint-text",
+      "title": "Add a per-level Hint button that shows tips only when the player presses it (do not auto-show tips). The tip content must come from the current level’s hint text.",
+      "reqIds": [
+        "REQ-21"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-fail-safe-system-after-2-failed-attempts-on-the-same-level-present-3-multiple-choice-options-to-make-the-level-easier-and-the-set-of-options-must-include-the-correct-answer",
+      "title": "Implement a fail-safe system: after 2 failed attempts on the same level, present 3 multiple-choice options to make the level easier, and the set of options must include the correct answer.",
+      "reqIds": [
+        "REQ-22"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-reposition-the-creator-name-remove-it-from-its-current-fixed-corner-badge-placement-and-display-it-under-the-choose-your-challenge-text-on-the-dashboard-screen-using-english-text-and-a-clean-readable-normal-font",
+      "title": "Reposition the creator name: remove it from its current fixed corner badge placement and display it under the “Choose your challenge” text on the dashboard screen, using English text and a clean, readable normal font.",
+      "reqIds": [
+        "REQ-23"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-expand-the-game-with-additional-levels-that-feel-more-futuristic-ai-themed-new-challenges-using-the-existing-puzzle-level-system-and-puzzle-types-already-supported-by-the-app",
+      "title": "Expand the game with additional levels that feel more futuristic/AI-themed (new challenges), using the existing puzzle level system and puzzle types already supported by the app.",
+      "reqIds": [
+        "REQ-24"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-and-render-new-generated-gaming-style-ui-background-assets-as-static-files-from-the-frontend-do-not-serve-them-via-the-backend-and-wire-them-into-the-updated-panels-introduced-in-req-20",
+      "title": "Add and render new generated gaming-style UI background assets as static files from the frontend (do not serve them via the backend), and wire them into the updated panels introduced in REQ-20.",
+      "reqIds": [
+        "REQ-25"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-change-the-puzzle-instruction-prompt-text-color-the-text-shown-like-tap-the-neural-network-node-in-the-gameplay-header-prompt-area-from-white-to-a-non-white-color-that-remains-highly-readable-on-the-current-colorful-panels-backgrounds-and-apply-it-consistently-across-all-puzzle-types-and-gameplay-screens-where-the-main-level-instruction-is-displayed",
+      "title": "Change the puzzle instruction/prompt text color (the text shown like “Tap the neural network node!” in the gameplay header/prompt area) from white to a non-white color that remains highly readable on the current colorful panels/backgrounds, and apply it consistently across all puzzle types and gameplay screens where the main level instruction is displayed.",
+      "reqIds": [
+        "REQ-26"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-increase-the-number-of-brain-test-style-puzzle-levels-by-adding-additional-more-realistic-brain-teaser-challenges-everyday-practical-scenarios-while-continuing-the-existing-ai-futuristic-flavor-using-only-the-already-supported-puzzle-types-tap-trick-drag-target-multi-step-riddle",
+      "title": "Increase the number of Brain Test–style puzzle levels by adding additional, more realistic brain-teaser challenges (everyday, practical scenarios) while continuing the existing AI/futuristic flavor, using only the already-supported puzzle types (tap-trick, drag-target, multi-step, riddle).",
+      "reqIds": [
+        "REQ-27"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-ensure-each-newly-added-level-is-fully-playable-end-to-end-by-extending-the-existing-puzzle-components-levelid-to-logic-config-mappings-as-needed-e-g-taptrickpuzzle-dragtotargetpuzzle-multistepsequencepuzzle-textriddlepuzzle-so-that-every-new-level-has-a-correct-solution-path-and-incorrect-attempts-are-counted-properly",
+      "title": "Ensure each newly added level is fully playable end-to-end by extending the existing puzzle components’ levelId-to-logic/config mappings as needed (e.g., TapTrickPuzzle, DragToTargetPuzzle, MultiStepSequencePuzzle, TextRiddlePuzzle) so that every new level has a correct solution path and incorrect attempts are counted properly.",
+      "reqIds": [
+        "REQ-28"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-fix-sound-effects-being-silent-in-the-current-react-app-so-that-gameplay-sounds-reliably-play-on-supported-user-interactions-success-fail-level-complete-game-complete-while-keeping-the-existing-mute-unmute-toggle-and-session-persistence-behavior",
+      "title": "Fix sound effects being silent in the current React app so that gameplay sounds reliably play on supported user interactions (success, fail, level complete, game complete) while keeping the existing mute/unmute toggle and session persistence behavior.",
+      "reqIds": [
+        "REQ-29"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-the-ui-feel-smoother-by-improving-animations-transitions-across-screen-changes-start-dashboard-playing-level-complete-game-complete-and-key-gameplay-interactions-without-changing-the-core-layout-or-removing-existing-features",
+      "title": "Make the UI feel smoother by improving animations/transitions across screen changes (start → dashboard → playing → level complete → game complete) and key gameplay interactions, without changing the core layout or removing existing features.",
+      "reqIds": [
+        "REQ-30"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-puzzle-content-for-levels-1-3-with-new-puzzles-new-instructions-hints-fail-safe-choices-and-correct-solution-logic-ensuring-each-of-these-levels-is-fully-playable-end-to-end-using-the-existing-supported-puzzle-types-and-attempt-counting",
+      "title": "Replace puzzle content for Levels 1–3 with new puzzles (new instructions, hints, fail-safe choices, and correct-solution logic), ensuring each of these levels is fully playable end-to-end using the existing supported puzzle types and attempt counting.",
+      "reqIds": [
+        "REQ-31"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-match-the-puzzle-instruction-prompt-text-color-to-the-bright-turquoise-tone-shown-in-the-uploaded-screenshot-screenshot-20260212-222504-jpg-and-apply-it-consistently-anywhere-the-main-level-instruction-is-rendered-e-g-the-instruction-header-in-the-playing-screen",
+      "title": "Match the puzzle instruction/prompt text color to the bright turquoise tone shown in the uploaded screenshot (Screenshot_20260212_222504.jpg) and apply it consistently anywhere the main level instruction is rendered (e.g., the instruction header in the playing screen).",
+      "reqIds": [
+        "REQ-32"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-replace-the-gameplay-instruction-background-panel-the-rounded-panel-behind-the-main-instruction-text-in-the-playing-screen-with-a-new-cartoon-style-image-background-static-frontend-asset-while-keeping-the-same-layout-and-readability",
+      "title": "Replace the gameplay instruction background panel (the rounded panel behind the main instruction text in the playing screen) with a new cartoon-style image background (static frontend asset) while keeping the same layout and readability.",
+      "reqIds": [
+        "REQ-33"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-make-gameplay-and-screen-slide-transitions-feel-smoother-specifically-for-transitions-into-out-of-the-playing-screen-and-between-level-states-playing-level-complete-playing-and-dashboard-playing-without-changing-the-core-game-flow",
+      "title": "Make gameplay and screen/slide transitions feel smoother, specifically for transitions into/out of the playing screen and between level states (playing → level-complete → playing, and dashboard → playing), without changing the core game flow.",
+      "reqIds": [
+        "REQ-34"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-add-a-final-game-completion-diamond-reward-system-in-the-react-app-that-triggers-only-when-the-player-completes-the-last-level-level-30-last-item-in-puzzlelevels-on-first-entry-into-the-game-complete-state-generate-and-store-in-frontend-state-for-the-current-session-a-uid-in-the-format-uid-6-digits-and-award-a-minimum-of-1000-diamonds-do-not-trigger-this-reward-on-non-final-levels",
+      "title": "Add a final-game-completion diamond reward system in the React app that triggers only when the player completes the last level (Level 30 / last item in puzzleLevels). On first entry into the game-complete state, generate and store (in frontend state for the current session) a UID in the format \"UID-\" + 6 digits and award a minimum of 1000 diamonds. Do not trigger this reward on non-final levels.",
+      "reqIds": [
+        "REQ-35"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-diamondnotification-overlay-component-and-display-it-as-a-floating-popup-on-game-completion-the-popup-must-auto-show-when-the-game-complete-screen-is-reached-and-auto-hide-after-5-seconds-the-popup-must-display-playername-diamonds-formatted-with-thousands-separators-uid-and-an-optional-rank-line-only-if-rank-is-available-adapt-styling-to-match-the-existing-colorful-cartoon-ui-do-not-use-the-dark-toast-styling-from-the-snippet",
+      "title": "Implement a DiamondNotification overlay component and display it as a floating popup on game completion. The popup must auto-show when the game-complete screen is reached and auto-hide after ~5 seconds. The popup must display: playerName, diamonds (formatted with thousands separators), UID, and an optional rank line only if rank is available. Adapt styling to match the existing colorful cartoon UI (do not use the dark toast styling from the snippet).",
+      "reqIds": [
+        "REQ-36"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-implement-a-dashboarddiamond-reward-card-component-and-render-it-on-the-dashboard-screen-when-the-player-has-completed-the-full-game-and-a-reward-payload-exists-in-state-the-card-must-show-playername-diamonds-uid-and-optional-rank-when-available-keep-all-user-facing-text-in-english",
+      "title": "Implement a DashboardDiamond reward card component and render it on the Dashboard screen when the player has completed the full game and a reward payload exists in state. The card must show playerName, diamonds, UID, and optional rank when available. Keep all user-facing text in English.",
+      "reqIds": [
+        "REQ-37"
+      ],
+      "version": 1
+    },
+    {
+      "id": "feature-determine-and-populate-the-optional-reward-rank-value-without-using-randomization-if-rank-cannot-be-determined-from-available-leaderboard-data-currently-top-5-omit-rank-leave-it-undefined-rather-than-guessing-do-not-change-the-meaning-of-leaderboard-score-submission",
+      "title": "Determine and populate the optional reward rank value without using randomization. If rank cannot be determined from available leaderboard data (currently top 5), omit rank (leave it undefined) rather than guessing. Do not change the meaning of leaderboard score submission.",
+      "reqIds": [
+        "REQ-38"
+      ],
+      "version": 1
+    }
+  ],
+  "new_feature_requests": [
+    {
+      "id": "AR-1",
+      "summary": "Port the current HTML/JS quiz into an Internet Computer app with React frontend and Motoko backend (canister)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-3",
+      "summary": "Implement a global shared on-chain leaderboard stored in Motoko canister (replace localStorage leaderboard)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-8",
+      "summary": "Replace the localStorage leaderboard with a global on-chain leaderboard stored in the Motoko backend canister. The leaderboard must store entries as {name, score} and return the top 5 scores globally sorted by score descending (ties may be in any order).",
+      "reqIds": [
+        "REQ-5"
+      ],
+      "status": "pending"
+    },
+    {
+      "id": "AR-9",
+      "summary": "Completely replace the current quiz system with Brain Test–style levels (puzzles, trick questions, interactions)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-10",
+      "summary": "Replace all existing UI/theme/layout with a colorful cartoon Brain-Test-style design",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-11",
+      "summary": "Implement Brain-Test-style puzzle interactions (e.g., multi-step puzzles, draggable/tappable elements, non-obvious solutions) within the React app",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-12",
+      "summary": "Add a dashboard/main menu level-selection screen to choose levels and access multiple options",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-13",
+      "summary": "Add difficulty system for levels (Easy/Medium/Hard) including filtering/sorting in the level-selection dashboard",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-14",
+      "summary": "Expand the game with more Brain-Test-style levels using more interesting puzzles/questions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-15",
+      "summary": "Vary puzzle types by difficulty (e.g., drag, trick, riddle) and align level content with its difficulty",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-16",
+      "summary": "Add/enable sound effects across the app aligned with puzzle gameplay events",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-17",
+      "summary": "Display persistent creator credit 'Created by SOUMYAJIT DUTTA' in a corner on every screen, using a clean readable normal font",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-18",
+      "summary": "Add a per-level Hint button that shows tips when pressed (tips for players who get stuck)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-19",
+      "summary": "Implement a fail-safe system: after 2 failed attempts on the same level, show 3 multiple-choice options including the correct answer to make it easier",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-20",
+      "summary": "Reposition the player/creator name text: remove it from the current placement and display it under the “Choose your challenge” section",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-21",
+      "summary": "Change the puzzle instruction/question text color (currently white) to a different color (applies to the text shown on each level’s instruction/prompt area)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-22",
+      "summary": "Update the rounded panel areas that currently look like stone to a smoother, more colorful/cartoon gaming-style background treatment (keep layout/text readable)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-23",
+      "summary": "Replace the first few puzzle levels (Levels 1–3) with new puzzles/content",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-24",
+      "summary": "Make the UI feel smoother by improving animations/transitions across screens and interactions",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-25",
+      "summary": "Fix sound effects not playing in the current React + Motoko Internet Computer app (audio playback is silent)",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-26",
+      "summary": "Replace the gameplay instruction/background panel with a cartoon-style image (static frontend asset) and align instruction text color to match the turquoise style shown in the user’s screenshot",
+      "reqIds": [],
+      "status": "pending"
+    },
+    {
+      "id": "AR-27",
+      "summary": "Add a final-game-completion (Level 30) diamond reward UI: generate and display a UID + minimum 1000 diamonds in a popup overlay, and also show a diamond reward card on the dashboard (optionally displaying rank)",
+      "reqIds": [],
+      "status": "pending"
+    }
+  ],
+  "gameProjectType": "none",
+  "projectName": "Topper Udaan Quiz",
+  "clarification_mode": "instant",
+  "clarification_rounds": 0
+}
